@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chat with GPT</title>
+</head>
+<body>
+	<div id="chatbox">
+		<div id="chatlog"></div>
+		<input type="text" id="userinput" placeholder="Type your message here...">
+		<button id="sendbtn">Send</button>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.8.0"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/gpt2@2.0.3"></script>
+	<script>
+		const model = await tf.loadGraphModel('https://storage.googleapis.com/tfjs-models/savedmodel/gpt2/medium/1/model.json');
+		const tokenizer = await createTokenizerFromUrl('https://storage.googleapis.com/tfjs-models/savedmodel/gpt2/medium/1/tokenizer.json');
+		const chatlog = document.getElementById('chatlog');
+		const userinput = document.getElementById('userinput');
+		const sendbtn = document.getElementById('sendbtn');
+		sendbtn.addEventListener('click', async () => {
+			const usermsg = userinput.value;
+			userinput.value = '';
+			chatlog.innerHTML += `<p>You: ${usermsg}</p>`;
+			const inputIds = tokenizer.encode(usermsg);
+			const outputIds = await model.generate(inputIds, {maxLen: 50});
+			const outputText = tokenizer.decode(outputIds);
+			chatlog.innerHTML += `<p>GPT: ${outputText}</p>`;
+		});
+	</script>
+</body>
+</html>
