@@ -1,31 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Chat with GPT</title>
+    <title>当前时间</title>
+    <script>
+        function showTime() {
+            var date = new Date();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var seconds = date.getSeconds();
+            var timeString = hours + ":" + minutes + ":" + seconds;
+            document.getElementById("time").innerHTML = timeString;
+        }
+
+        setInterval(showTime, 1000); // 每秒更新一次时间
+    </script>
 </head>
 <body>
-	<div id="chatbox">
-		<div id="chatlog"></div>
-		<input type="text" id="userinput" placeholder="Type your message here...">
-		<button id="sendbtn">Send</button>
-	</div>
-	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.8.0"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/gpt2@2.0.3"></script>
-	<script>
-		const model = await tf.loadGraphModel('https://storage.googleapis.com/tfjs-models/savedmodel/gpt2/medium/1/model.json');
-		const tokenizer = await createTokenizerFromUrl('https://storage.googleapis.com/tfjs-models/savedmodel/gpt2/medium/1/tokenizer.json');
-		const chatlog = document.getElementById('chatlog');
-		const userinput = document.getElementById('userinput');
-		const sendbtn = document.getElementById('sendbtn');
-		sendbtn.addEventListener('click', async () => {
-			const usermsg = userinput.value;
-			userinput.value = '';
-			chatlog.innerHTML += `<p>You: ${usermsg}</p>`;
-			const inputIds = tokenizer.encode(usermsg);
-			const outputIds = await model.generate(inputIds, {maxLen: 50});
-			const outputText = tokenizer.decode(outputIds);
-			chatlog.innerHTML += `<p>GPT: ${outputText}</p>`;
-		});
-	</script>
+    <h1>当前时间:</h1>
+    <div id="time"></div>
 </body>
 </html>
